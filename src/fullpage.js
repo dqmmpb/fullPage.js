@@ -268,8 +268,7 @@
 
             }else{
                 css($htmlBody, {
-                    'overflow' : 'visible',
-                    'height' : 'initial'
+                    'overflow' : 'visible'
                 });
 
                 setRecordHistory(false, 'internal');
@@ -947,7 +946,7 @@
         * Enables the Youtube videos API so we can control their flow if necessary.
         */
         function enableYoutubeAPI(){
-            $('iframe[src*="youtube.com/embed/"]', container).forEach(function(item){
+            Array.prototype.forEach.call($('iframe[src*="youtube.com/embed/"]', container), function(item){
                 addURLParam(item, 'enablejsapi=1');
             });
         }
@@ -3310,7 +3309,16 @@
     */
     function $(selector, context){
         context = arguments.length > 1 ? context : document;
-        return context ? context.querySelectorAll(selector) : null;
+        // 兼容IE8的querySelectorAll返回的类数组对象无法添加Array方法，复制为Array
+        if(context) {
+          var results = [];
+          Array.prototype.push.apply( results,
+            context.querySelectorAll(selector)
+          );
+          return results;
+        } else {
+            return null;
+        }
     }
 
     /**
