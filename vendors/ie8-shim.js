@@ -153,9 +153,12 @@
       // 兼容IE8的querySelectorAll返回的类数组对象无法添加Array方法，复制为Array
       if (context) {
         var results = [];
-        Array.prototype.push.apply(results,
-          context.querySelectorAll(selector)
-        );
+        var querySelect = context.querySelectorAll(selector);
+        if(querySelect) {
+          for(var i = 0; i < querySelect.length; i++) {
+            results[i] = querySelect[i];
+          }
+        }
         return results;
       }
       return context ? context.querySelectorAll(selector) : null;
